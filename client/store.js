@@ -2,6 +2,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {createLogger }from 'redux-logger';
 import socket from './socket';
 import thunkMiddleware from 'redux-thunk';
+import axios from 'axios'
 export const GOT_MESSAGES_FROM_SERVER = 'GOT_MESSAGES_FROM_STORE'
 
 export const WRITE_MESSAGE = 'WRITE_MESSAGE'
@@ -14,15 +15,19 @@ export const initialState = {
 export const store = createStore(reducer, applyMiddleware(thunkMiddleware, createLogger()));
 
 export function fetchMessages () {
-	return  function thunk (){
+
+	// our "thunk"
+	return function thunk (dispatch) {
+
 		return axios.get('/api/messages')
-			.then(res => res.data)
-			.then(messages => this.setState({ messages }))
-			.then(msg => {
-				const action = gotMessagesFromServer(msg)
-			dispatch(action)
-		})
+		.then(res => res.data)
+		.then(messages => {
+			const action = gotMessagesFromServer(messages);
+			// note that we can just "dispatch", rather than "store.dispatch"
+			dispatch(action);
+		});
 	}
+
 }
 
 export function postMessage (message) {
@@ -30,7 +35,7 @@ export function postMessage (message) {
 		return axios.post('/api/messages', message)
 		.then(res => res.data)
 		.then(newMessage => {
-			const action = getMessage(newMessage);
+			const action = gotMessagesFromServer(newMessage)
 			dispatch(action);
 			socket.emit('new-message', newMessage);
 		});

@@ -35,9 +35,11 @@ export default class NewMessageEntry extends Component {
 		evt.preventDefault(); // don't forget to preventDefault!
 		const content = this.state.content
 		let channelId = this.props.channelId
-
-
+		store.dispatch(postMessage({content , channelId}))
 	}
+
+
+
 
 	render() {
 		const handleChange = this.handleChange;
