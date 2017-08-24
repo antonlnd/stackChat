@@ -1,46 +1,40 @@
 import React, { Component } from 'react';
 import Message from './Message';
 import NewMessageEntry from './NewMessageEntry';
-import axios from 'axios';
-import {gotMessagesFromServer,store} from '../store'
+import { fetchMessages, store } from '../store'
 
 
 export default class MessagesList extends Component {
 
-  constructor () {
-    super();
-    this.state = store.getState();
-  }
+	constructor() {
+		super();
+		this.state = store.getState();
+	}
 
-  componentDidMount () {
-    axios.get('/api/messages')
-      .then(res => res.data)
-      .then(messages => this.setState({ messages }))
-      .then(msg => {
-        const action = gotMessagesFromServer(msg)
-        store.dispatch(action)
-      })
+	componentDidMount() {
+		// etc...
+		const thunk = fetchMessages();
+		store.dispatch(thunk);
+	}
 
-    this.unsubscribe = store.subscribe(() => this.setState(store.getState()))
-  }
+	componentWillUnmount() {
+		this.unsubscribe();
+	}
 
-  componentWillUnmount () {
-    this.unsubscribe();
-  }
+	render() {
 
-  render () {
+		const channelId = Number(this.props.match.params.channelId); // because it's a string "1", not a number!
+		const messages = this.state.messages;
+		const filteredMessages = messages.filter(message => message.channelId === channelId);
 
-    const channelId = Number(this.props.match.params.channelId); // because it's a string "1", not a number!
-    const messages = this.state.messages;
-    const filteredMessages = messages.filter(message => message.channelId === channelId);
+		return (
+			<div>
+				<ul className="media-list">
+					{filteredMessages.map(message => <Message message={message} key={message.id}/>)}
+				</ul>
+				<NewMessageEntry channelId={this.props.match.params.channelId}/>
 
-    return (
-      <div>
-        <ul className="media-list">
-          { filteredMessages.map(message => <Message message={message} key={message.id} />) }
-        </ul>
-        <NewMessageEntry />
-      </div>
-    );
-  }
+			</div>
+		);
+	}
 }

@@ -3,24 +3,14 @@
 // compiles it into css, and then auto-magically injects a <style> tag onto the DOM!
 // Wowzers! Check out the webpack.config.js to see how to add them!
 import './index.scss';
-import {gotMessagesFromServer, store} from './store'
+// import {postMessage,fetchMessages,writeMessage, store} from './store'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Main } from './components';
 
-console.log('-------------------------');
-console.log('State before any actions: ', store.getState());
 
-const gotMessagesAction = gotMessagesFromServer([{ author: 'Cody', content: 'Hello world!'}, { author: 'World', content: 'Oh, hey, Cody!' }]);
-store.dispatch(gotMessagesAction);
-
-console.log('-------------------------');
-console.log('State after first GOT_MESSAGES_FROM_SERVER action: ', store.getState());
-
-const anotherMessagesAction = gotMessagesFromServer([{ author: 'Ben', content: 'I like JS. How about you, Fira?'}, { author: 'Fira', content: 'I like Python!' }]);
-store.dispatch(anotherMessagesAction);
 
 ReactDOM.render(
   <Router>
