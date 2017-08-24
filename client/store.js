@@ -3,23 +3,24 @@ const GOT_MESSAGES_FROM_SERVER = 'GOT_MESSAGES_FROM_STORE'
 
 const gotMessagesFromServer = function(messages) {
     return {
-        type: GOT_MESSAGES_FROM_SERVER,
+        type: 'GOT_MESSAGES_FROM_SERVER',
         messages: messages
     }
 }
 
 
 
-const initialState = { messages: []}
+const initialState = { messages: [] }
 
  const store = createStore(reducer);
 
-function reducer(action, state = initialState){
+function reducer(state = initialState, action){
+    console.log(action)
     switch (action.type) {
-        case GOT_MESSAGES_FROM_SERVER: 
+        case (action.type ==='GOT_MESSAGES_FROM_SERVER'): 
            return Object.assign({}, state, { messages: action.messages });
         default: 
            return state;
       }
 }
-export default {gotMessagesFromServer, store}
+export {gotMessagesFromServer, store}
