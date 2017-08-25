@@ -3,9 +3,12 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import MessagesList from './MessagesList';
-
+import { fetchMessages, getName, postMessage, store, writeMessage } from '../store'
 export default class Main extends Component {
-
+    componentDidMount () {
+        const thunk = fetchMessages()
+        store.dispatch(thunk)
+    }
   render () {
     return (
       <div>

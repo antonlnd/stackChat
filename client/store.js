@@ -9,8 +9,10 @@ export const WRITE_MESSAGE = 'WRITE_MESSAGE'
 
 export const GOT_NEW_MESSAGE_FROM_SERVER = 'GOT_NEW_MESSAGE_FROM_SERVER'
 
+export const GOT_NAME = 'GOT_NAME'
+
 export const initialState = {
-	messages: [], newMessageEntry: ''
+	messages: [], newMessageEntry: '', name: ''
 }
 export const store = createStore(reducer, applyMiddleware(thunkMiddleware, createLogger()));
 
@@ -28,6 +30,17 @@ export function fetchMessages () {
 		});
 	}
 
+}
+
+export function getName (name) {
+	const action = { type: GOT_NAME, name };
+	return action;
+}
+
+export const getNameFromServer = function ( name) {
+	return {
+		type: 'GOT_NAME', name:name
+	}
 }
 
 export function postMessage (message) {
@@ -78,6 +91,10 @@ export function reducer( state = initialState, action ) {
 			return {
 				...state, content: action.content
 			}
+		case GOT_NAME:
+					return {
+						...state, name: action.name
+					}
 
 		default:
 			return state;

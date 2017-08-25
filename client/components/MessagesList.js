@@ -4,7 +4,7 @@ import NewMessageEntry from './NewMessageEntry';
 import { fetchMessages, store } from '../store'
 
 
-export default class MessagesList extends Component {
+export default class Messages extends Component {
 
 	constructor() {
 		super();
@@ -12,9 +12,7 @@ export default class MessagesList extends Component {
 	}
 
 	componentDidMount() {
-		// etc...
-		const thunk = fetchMessages();
-		store.dispatch(thunk);
+		this.unsubscribe = store.subscribe(() => this.setState(store.getState()));
 	}
 
 	componentWillUnmount() {
